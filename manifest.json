@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "V2EX 国内体验增强",
   "description": "为 V2EX 镜像站点添加 Bing 搜索和链接重定向功能",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "permissions": [
     "storage"
   ],
@@ -10,6 +10,11 @@
     {
       "matches": ["https://global.v2ex.co/*", "https://cn.bing.com/*"],
       "js": ["content.js"]
+    },
+    {
+      "matches": ["*://*/*"],
+      "js": ["redirect.js"],
+      "run_at": "document_start"
     }
   ],
   "action": {

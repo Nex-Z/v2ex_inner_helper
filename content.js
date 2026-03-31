@@ -1,18 +1,6 @@
 (function() {
   'use strict';
 
-  let redirectEnabled = true;
-
-  chrome.storage.sync.get({ redirectEnabled: true }, function(result) {
-    redirectEnabled = result.redirectEnabled;
-  });
-
-  chrome.storage.onChanged.addListener(function(changes, namespace) {
-    if (namespace === 'sync' && changes.redirectEnabled) {
-      redirectEnabled = changes.redirectEnabled.newValue;
-    }
-  });
-
   function addBingSearchOption(keyword) {
     const searchItemGroups = document.querySelectorAll('.search-item-group');
     if (searchItemGroups.length === 0) return;
@@ -80,32 +68,8 @@
     });
   }
 
-  function handleLinkClick(e) {
-    if (!redirectEnabled) return;
-
-    const link = e.target.closest('a');
-    if (!link) return;
-
-    const href = link.getAttribute('href');
-    if (!href) return;
-
-    if (link.classList.contains('bing-search-item')) return;
-
-    if (href.includes('v2ex.com') && !href.includes('global.v2ex.co')) {
-      const targetUrl = href.replace(/v2ex\.com/g, 'global.v2ex.co');
-      e.preventDefault();
-      e.stopPropagation();
-      window.open(targetUrl, link.target || '_self');
-    }
-  }
-
-  function setupLinkRedirect() {
-    document.addEventListener('click', handleLinkClick, true);
-  }
-
   function init() {
     setupSearchBoxObserver();
-    setupLinkRedirect();
 
     const observer = new MutationObserver(function(mutations) {
       mutations.forEach(function(mutation) {
